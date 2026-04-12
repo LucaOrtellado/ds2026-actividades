@@ -1,0 +1,38 @@
+body {
+    background-color: #000005;
+    color: #e2dede;
+    font-family: Arial, Georgia, sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    font-family: monospace, Arial, sans-serif;
+    color: #ffffff;
+    text-align: center;
+}
+a {
+    color: aquamarine;
+    text-align: center;
+    padding: 8px 15px;
+    margin: 5px;
+    border-radius: 8px;
+}
+li {
+    margin-bottom: 1.8rem;
+}
+img {
+    border: 5px solid #0546f8c0;
+    width: 300px;
+    height: 150px;
+    border-radius: 8px
+
+}
+
+.indice {
+    background-color: rgba(113, 150, 161, 0.445);
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 8px
+    
+}
