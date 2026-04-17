@@ -28,7 +28,7 @@ a {
 li {
     margin-bottom: 1.8rem;
     color: var(--secondary-color);
-    box-shadow: var(--shadow);
+    
 }
 img {
     border: 5px solid #0546f8c0;
