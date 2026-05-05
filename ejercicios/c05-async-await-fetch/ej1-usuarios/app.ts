@@ -5,7 +5,7 @@ interface Usuario {
     phone: string;
 }
 
-async function obtenerUsuarios(): Promise<Usuario[]> {
+async function obtenerUsuario(): Promise<Usuario[]> {
     try {
         const response = await fetch("https://jsonplaceholder.typicode.com/users");
 
@@ -21,11 +21,11 @@ async function obtenerUsuarios(): Promise<Usuario[]> {
     }
 }
 
-async function main() {
-    const usuarios = await obtenerUsuarios();
+async function init() {
+    const usuarios = await obtenerUsuario();
 
     usuarios.forEach(usuario => {
         console.log(`Nombre: ${usuario.name} - Email: ${usuario.email}`);
     });
 }
-main();
+init();
