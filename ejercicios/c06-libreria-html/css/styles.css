@@ -1,15 +1,15 @@
 body {
-    background-color: #707781;
+    background-color: #868686;
     font-family:  Helvetica,Arial,sans-serif;
 }
 
 .navbar {
     padding: 15px 30px;
-    box-shadow: 0px 2px 8px rgba(255, 255, 255, 0.1);
+    box-shadow: 0px 2px 8px rgba(252, 252, 252, 0.486);
 }
 
 .navbar-brand {
-    font-size: 1.4rem;
+    font-size: 2rem;
     font-weight: bold;
     margin-left: 10px;
 }
@@ -21,4 +21,38 @@ body {
 
 img {
     border-radius: 5px;
+}
+.hero {
+    color: #000000d8;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #6cebc0c4;
+    border-radius: 8px;
+}
+
+.hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: bold;
+}
+
+.hero h3 {
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 20px;
+    font-weight: 300;
+}
+
+.card {
+    margin: 15px;
+}
+
+.card-title {
+    font-family: Garamond, serif;
+    font-size: 1.3rem;
+}
+
+.card-text {
+    font-family: Georgia, serif;
+    font-size: 1rem;
+    color: #21504cd2;
 }
