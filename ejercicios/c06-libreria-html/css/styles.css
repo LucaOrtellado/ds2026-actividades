@@ -56,3 +56,19 @@ img {
     font-size: 1rem;
     color: #21504cd2;
 }
+
+image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+p {
+    color: #000000d8;
+    font-family: sans-serif, Georgia;
+}
+
+h1 {
+    font-family: Garamond, serif;
+    font-size: 3 rem;
+}
