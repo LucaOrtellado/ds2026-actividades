@@ -32,6 +32,30 @@
   </div>
 </nav>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <div class="container my-5">
+        <h1 class="text-center mb-4">Buscar libros</h1>
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <input type="text" id="input" class="form-control" placeholder="Ingrese un libro...">
+            </div>
+
+            <div class="col-md-2">
+                <button
+                    id="boton" class="btn btn-primary w-100">Buscar
+                </button>
+            </div>
+
+        </div>
+        <p id="error"class="text-danger text-center mt-3"></p>
+
+        <div 
+          id="resultados"class="row justify-content-center mt-4">
+        </div>
+    </div>
+
+
+  <script src = js/data.js></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
