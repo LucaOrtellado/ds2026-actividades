@@ -1,12 +1,16 @@
-import logo from '../assets/logos-de-libros-1.jpg';
-function Navbar() {
+import { Link } from 'react-router-dom';
+
+import logo from '../../assets/logos-de-libros-1.jpg';
+function Header() {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
       <div className="container">
-        <a className="navbar-brand d-flex align-items-center fw-bold" href="./index.html">
+        <Link className="navbar-brand d-flex align-items-center fw-bold" to="/">
           <img src={logo} alt="Logo" width="40" className="me-2" />
-          <span className="me-2" style={{ fontSize: '1.4rem' }}></span>Librería
-        </a>
+          <span className="me-2" style={{ fontSize: '1.4rem' }}>
+            Librería
+          </span>
+        </Link>
         
         <button
           className="navbar-toggler"
@@ -23,13 +27,9 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="./index.html">Inicio</a>
+              <Link to="/catalogo" >Ver catálogo</Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="./catalogo.html">Catálogo</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="./contacto.html">Contacto</a>
             </li>
           </ul>
         </div>
@@ -37,4 +37,4 @@ function Navbar() {
     </nav>
   );
 }
-export default Navbar;
+export default Header;

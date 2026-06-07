@@ -1,13 +1,16 @@
 import { useState } from 'react'
+import Nav from 'react-bootstrap/esm/Nav';
+import { Link } from 'react-router-dom';
 
 type LibroCardProps = {
+  id: number
   titulo: string
   autor: string
   descripcion: string
   imagen: string
 }
 
-function LibroCard({ titulo, autor, descripcion, imagen }: LibroCardProps) {
+function LibroCard({ id, titulo, autor, descripcion, imagen }: LibroCardProps) {
   const [esFavorito, setEsFavorito] = useState<boolean>(false)
 
   return (
@@ -22,7 +25,7 @@ function LibroCard({ titulo, autor, descripcion, imagen }: LibroCardProps) {
           <li className="list-group-item">{autor}</li>
         </ul>
         <div className="card-body d-flex justify-content-between">
-          <a href="#" className="card-link">Ver más</a>
+          <Nav.Link as={Link} to={`/libros/${id}`} >Ver más</Nav.Link>
           <button 
             className="btn btn-outline-warning btn-sm" 
             onClick={() => setEsFavorito(!esFavorito)}
