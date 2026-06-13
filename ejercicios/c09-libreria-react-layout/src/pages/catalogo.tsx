@@ -10,15 +10,15 @@ import libro6 from '../assets/EDCI-769789871518937.jpg';
 import Nav from 'react-bootstrap/esm/Nav';
 import { Link } from 'react-router-dom';
 
-function Home () {
+function Catalogo () {
   return (
     <>
       <section className="px-4 py-5 text-center bg-dark">
         <div className="py-5">
-          <h1 className="display-5 fw-bold text-white">Bienvenidos</h1>
+          <h1 className="display-5 fw-bold text-white">Catalogo</h1>
           <div className="col-lg-6 mx-auto">
             <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
-            <Nav.Link as={Link} to="/" >Inicio</Nav.Link>              
+            <Nav.Link as={Link} to="/Home" >Inicio</Nav.Link>              
             </div>
           </div>
         </div>
@@ -26,7 +26,7 @@ function Home () {
           <div className="container-fluid py-4">
       <div className="row g-4 justify-content-center">
 
-        <LibroCard
+        <LibroCard 
             id={1}
           titulo="El Principito" 
           autor="Antoine de Saint-Exupéry" 
@@ -50,7 +50,7 @@ function Home () {
           imagen={libro3} 
         />
 
-        <LibroCard  
+        <LibroCard 
             id={4}
           titulo="Holyland" 
           autor="Kouji Mori" 
@@ -67,7 +67,7 @@ function Home () {
         />
 
         <LibroCard 
-            id={6}
+            id={6}  
           titulo="Martín Fierro" 
           autor="José Hernández" 
           descripcion="La épica obra literaria argentina que narra la vida del gaucho Martín Fierro." 
@@ -80,4 +80,4 @@ function Home () {
   );
 }
 
-export default Home
+export default Catalogo
