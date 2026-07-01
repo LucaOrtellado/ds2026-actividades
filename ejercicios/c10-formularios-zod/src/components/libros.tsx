@@ -13,7 +13,6 @@ export const libros = [
     autor: 'Antoine de Saint-Exupéry',
     descripcion: 'Una historia clásica...',
     imagen: libro1,
-    detalle: 'El Principito es una novela publicada en 1943...',
     disponible: true,
     precio: 9.99,
   },
@@ -23,7 +22,6 @@ export const libros = [
     autor: 'Osamu Dazai',
     descripcion: 'Una novela que explora...',
     imagen: libro2,
-    detalle: 'Es una de las novelas más importantes de Japón...',
     precio: 19.99,
     disponible: false,
   },
@@ -33,7 +31,6 @@ export const libros = [
     autor: 'José Mauro de Vasconcelos',
     descripcion: 'Una obra maestra de la literatura latinoamericana...',
     imagen: libro3,
-    detalle: 'La novela narra la historia de un niño en busca de su identidad...',
     precio: 14.99,
     disponible: true,
   },
@@ -43,7 +40,6 @@ export const libros = [
     autor: 'Kouji Mori',
     descripcion: 'Un thriller psicológico que explora temas de identidad y pertenencia...',
     imagen: libro4,
-    detalle: 'La historia se desarrolla en un entorno post-apocalíptico...',
     precio: 24.99,
     disponible: true,
   },
@@ -53,7 +49,6 @@ export const libros = [
     autor: 'Harlan Ellison',
     descripcion: 'Una colección de relatos que desafían las normas...',
     imagen: libro5,
-    detalle: 'Los relatos exploran lo inquietante del ser humano...',
     precio: 19.99,
     disponible: false
   },
@@ -63,7 +58,6 @@ export const libros = [
     autor: 'José Hernández',
     descripcion: 'La épica obra literaria argentina...',
     imagen: libro6,
-    detalle: 'La novela narra la vida del gaucho Martín Fierro...',
     precio: 14.99,
     disponible: true
   }
