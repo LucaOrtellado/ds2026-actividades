@@ -1,49 +1,45 @@
-import { Request, Response } from 'express';
-import * as autorService from '../services/autor.service';
+import { Request, Response } from "express";
+import * as autoresService from "../services/autor.service";
 
-export function getAll(req: Request, res: Response): void {
-  const { nacionalidad } = req.query;
-  const filtroNacionalidad = typeof nacionalidad === 'string' ? nacionalidad : undefined;
-  res.json(autorService.findAll(filtroNacionalidad));
+export async function getAll(req: Request, res: Response) {
+    return res.json(await autoresService.findAll());
 }
 
-export function getById(req: Request, res: Response): void {
-  const id = Number(req.params.id);
-  const autor = autorService.findById(id);
-
-  if (!autor) {
-    res.status(404).json({ error: 'Autor no encontrado' });
-    return;
-  }
-
-  res.json(autor);
+export async function getById(req: Request, res: Response) {
+    try {
+    const autor = await autoresService.findById(Number(req.params.id));
+    if (!autor) return res.status(404).json({ error: "Autor no encontrado" });
+    return res.json(autor);
+    } catch (error) {
+        return res.status(500).json({ error: "Error interno del servidor" });
+    }
 }
 
-export function create(req: Request, res: Response): void {
-  const nuevo = autorService.create(req.body);
-  res.status(201).json(nuevo);
+export async function create(req: Request, res: Response) {
+    try {
+        const nuevo = await autoresService.create(req.body);
+        return res.status(200).json(nuevo);
+    } catch (error) {
+        return res.status(500).json({ error: "Error interno del servidor" });
+    }
 }
 
-export function update(req: Request, res: Response): void {
-  const id = Number(req.params.id);
-  const actualizado = autorService.update(id, req.body);
-
-  if (!actualizado) {
-    res.status(404).json({ error: 'Autor no encontrado' });
-    return;
-  }
-
-  res.json(actualizado);
+export async function update(req: Request, res: Response) {
+    try {
+        const actualizado = await autoresService.update(Number(req.params.id), req.body);
+        if (!actualizado) return res.status(404).json({ error: "Autor no encontrado" });
+        return res.json(actualizado);
+    } catch (error) {
+        return res.status(500).json({ error: "Error interno del servidor" });
+    }
 }
 
-export function remove(req: Request, res: Response): void {
-  const id = Number(req.params.id);
-  const ok = autorService.remove(id);
-
-  if (!ok) {
-    res.status(404).json({ error: 'Autor no encontrado' });
-    return;
-  }
-
-  res.status(204).send();
+export async function remove(req: Request, res: Response) {
+    try {
+        const borrado = await autoresService.remove(Number(req.params.id));
+        if (!borrado) return res.status(404).json({ error: "Autor no encontrado" });
+        return res.status(204).send();
+    } catch (error) {
+        return res.status(500).json({ error: "Error interno del servidor" });
+    }
 }

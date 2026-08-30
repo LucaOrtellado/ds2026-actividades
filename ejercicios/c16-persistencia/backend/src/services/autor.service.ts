@@ -1,56 +1,32 @@
-import { Autor } from "../types/autor.types"
+import { prisma } from "../config/prisma";
+import { Autor } from "../types/autor.types";
 
-const autores: Autor[] = [
-  { 
-    id: 1, 
-    nombre: "Antoine de Saint-Exupéry", 
-    nacionalidad: "Francés", 
-    biografia: "Aviador y escritor francés, reconocido mundialmente por ser el autor del clásico El Principito." 
-  },
-  { 
-    id: 2, 
-    nombre: "Osamu Dazai", 
-    nacionalidad: "Japonés", 
-    biografia: "Destacado novelista japonés de la posguerra, célebre por obras como Indigno de ser humano." 
-  },
-  { 
-    id: 3, 
-    nombre: "José Mauro de Vasconcelos", 
-    nacionalidad: "Brasileño", 
-    biografia: "Escritor y periodista brasileño, autor de la aclamada obra Mi planta de naranja lima." 
-  }
-]
-
-let proximoId = 4
-
-export function findAll(nacionalidad?: string): Autor[] {
-  if (!nacionalidad) return autores;
-  return autores.filter(a => a.nacionalidad.toLowerCase() === nacionalidad.toLowerCase());
+export async function findAll(): Promise<Autor[]> {
+  return prisma.autor.findMany();
 }
 
-export function findById(id: number): Autor | undefined {
-  return autores.find(a => a.id === id);
+export async function findById(id: number): Promise<Autor | null> {
+  return prisma.autor.findUnique({
+    where: { id }
+  });
 }
 
-export function create(datos: Omit<Autor, "id">): Autor {
-  const nuevo: Autor = { id: proximoId++, ...datos };
-  autores.push(nuevo);
-  return nuevo;
+export async function create(datos: Omit<Autor, "id">): Promise<Autor> {
+  return prisma.autor.create({
+    data: datos
+  });
 }
 
-export function update(id: number, datos: Partial<Omit<Autor, "id">>): Autor | undefined {
-  const index = autores.findIndex(a => a.id === id);
-  if (index === -1) return undefined;
-
-  const autorActualizado: Autor = { ...autores[index], ...datos, id };
-  autores[index] = autorActualizado;
-  
-  return autorActualizado;
+export async function update(id: number, datos: Partial<Omit<Autor, "id">>): Promise<Autor | null> {
+  return prisma.autor.update({
+    where: { id },
+    data: datos
+  });
 }
 
-export function remove(id: number): boolean {
-  const index = autores.findIndex(a => a.id === id);
-  if (index === -1) return false;
-  autores.splice(index, 1);
+export async function remove(id: number): Promise<boolean> {
+  const existe = await prisma.autor.findUnique({ where: { id } });
+  if (!existe) return false;
+  await prisma.autor.delete({ where: { id } });
   return true;
 }

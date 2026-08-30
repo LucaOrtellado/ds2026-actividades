@@ -1,49 +1,51 @@
-import { Request, Response } from 'express';
-import * as libroService from '../services/libro.service';
+import { Request, Response } from "express";
+import * as libroService from "../services/libro.services";
 
-export function getAll(req: Request, res: Response): void {
-  const { genero } = req.query;
-  const filtroGenero = typeof genero === 'string' ? genero : undefined;
-  res.json(libroService.findAll(filtroGenero));
+// El controller traduce HTTP <-> dominio y elige el status code.
+// No busca ni guarda datos: eso es del service.
+
+export async function getAll(req: Request, res: Response) {
+  // req.query siempre trae strings. La traducción a boolean es trabajo de esta capa.
+  const { disponible } = req.query;
+  const filtro = disponible === undefined ? undefined : disponible === "true";
+  return res.json(await libroService.findAll(filtro));
 }
 
-export function getById(req: Request, res: Response): void {
-  const id = Number(req.params.id);
-  const libro = libroService.findById(id);
-
-  if (!libro) {
-    res.status(404).json({ error: 'Libro no encontrado' });
-    return;
+export async function getById(req: Request, res: Response) {
+  try {
+  const libro = await libroService.findById(Number(req.params.id));
+  if (!libro) return res.status(404).json({ error: "Libro no encontrado" });
+  return res.json(libro);
+  } catch (error) {
+    return res.status(500).json({ error: "Error interno del servidor" });
   }
-
-  res.json(libro);
 }
 
-export function create(req: Request, res: Response): void {
-  const nuevo = libroService.create(req.body);
-  res.status(201).json(nuevo);
-}
-
-export function update(req: Request, res: Response): void {
-  const id = Number(req.params.id);
-  const actualizado = libroService.update(id, req.body);
-
-  if (!actualizado) {
-    res.status(404).json({ error: 'Libro no encontrado' });
-    return;
+export async function create(req: Request, res: Response) {
+  try {
+    const nuevo = await libroService.create(req.body);
+    return res.status(201).json(nuevo);
+  } catch (error) {
+    return res.status(500).json({ error: "Error interno del servidor" });
   }
-
-  res.json(actualizado);
 }
 
-export function remove(req: Request, res: Response): void {
-  const id = Number(req.params.id);
-  const ok = libroService.remove(id);
-
-  if (!ok) {
-    res.status(404).json({ error: 'Libro no encontrado' });
-    return;
+export async function update(req: Request, res: Response) {
+  try {
+    const actualizado = await libroService.update(Number(req.params.id), req.body);
+    if (!actualizado) return res.status(404).json({ error: "Libro no encontrado" });
+    return res.json(actualizado);
+  } catch (error) {
+    return res.status(500).json({ error: "Error interno del servidor" });
   }
+}
 
-  res.status(204).send();
+export async function remove(req: Request, res: Response) {
+  try {
+    const borrado = await libroService.remove(Number(req.params.id));
+    if (!borrado) return res.status(404).json({ error: "Libro no encontrado" });
+    return res.status(204).send(); // 204 = sin body. No lleva .json()
+  } catch (error) {
+    return res.status(500).json({ error: "Error interno del servidor" });
+  }
 }

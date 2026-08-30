@@ -1,62 +1,29 @@
-import { Libro } from "../types/libro.types"
+import { prisma } from "../config/prisma";
+import { Libro } from "../types/libro.types";
 
-const libros: Libro[] = [
-  {
-    id: 1,
-    titulo: "El Principito",
-    autor: "Antoine de Saint-Exupéry",
-    genero: "Ficción",
-    precio : 10.99,
-    imagen: "https://covers.openlibrary.org/b/id/8231856-L.jpg",
-    disponible: true,
-  },
-  {
-    id: 2,
-    titulo: "Indigno de ser humano",
-    autor: "Osamu Dazai",
-    genero: "Ficción",
-    precio : 12.99,
-    imagen: "https://covers.openlibrary.org/b/id/8474077-L.jpg",
-    disponible: true,
-  },
-  {
-    id: 3,
-    titulo: "Mi planta de naranja lima",
-    autor: "José Mauro de Vasconcelos",
-    genero: "Drama",
-    precio : 15.99,
-    imagen: "https://covers.openlibrary.org/b/id/8231990-L.jpg",
-    disponible: false,
-  }
-]
-
-let proximoId = 4
-
-export function findAll(genero?: string): Libro[] {
-  if (!genero) return libros;
-  return libros.filter(l => l.genero.toLowerCase() === genero.toLowerCase());
+export async function findAll(disponible?: boolean): Promise<Libro[]> {
+  return prisma.libro.findMany({ where: { disponible } });
 }
 
-export function findById(id: number): Libro | undefined {
-  return libros.find(l => l.id === id);
+export async function findById(id: number): Promise<Libro | null> {
+  return prisma.libro.findUnique({ where: { id } });
 }
 
-export function create(datos: Omit<Libro, "id">): Libro {
-  const nuevo: Libro = { id: proximoId++, ...datos };
-  libros.push(nuevo);
-  return nuevo;
+export async function create(datos: Omit<Libro, "id">): Promise<Libro> {
+  return prisma.libro.create({ data: datos });
 }
 
-export function update(id: number, datos: Partial<Omit<Libro, "id">>): Libro | undefined {
-  const index = libros.findIndex(l => l.id === id);
-  if (index === -1) return undefined;
-  libros[index] = { ...libros[index], ...datos, id };
-  return libros[index];
+export async function update(id: number, datos: Omit<Libro, "id">): Promise<Libro | null> {
+  const existe = await prisma.libro.findUnique({ where: { id } });
+  if (!existe) return null;
+  await prisma.libro.update({ where: { id }, data: datos });
+  return prisma.libro.findUnique({ where: { id } });
 }
 
-export function remove(id: number): boolean {
-  const index = libros.findIndex(l => l.id === id);
-  if (index === -1) return false;
-  libros.splice(index, 1);
+export async function remove(id: number): Promise<boolean> {
+  const existe = await prisma.libro.findUnique({ where: { id } });
+  if (!existe) return false;                     
+  await prisma.libro.delete({ where: { id } });  
   return true;
+
 }
