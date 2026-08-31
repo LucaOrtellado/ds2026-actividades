@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as libroService from "../services/libro.services";
+import * as libroService from "../services/libro.service";
 
 // El controller traduce HTTP <-> dominio y elige el status code.
 // No busca ni guarda datos: eso es del service.
