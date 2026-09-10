@@ -1,19 +1,79 @@
 @baseUrl = http://localhost:3000
 
+
+
+### A1. Registro OK → 201, SIN passwordHash en la respuesta
+POST {{baseUrl}}/api/auth/registro
+Content-Type: application/json
+
+{ "nombre": "luca", "email": "luca@libreria.test", "password": "A12345678" }
+
+### A2. Mismo email otra vez → 409
+POST {{baseUrl}}/api/auth/registro
+Content-Type: application/json
+
+{ "nombre": "luca", "email": "luca@libreria.test", "password": "A12345678" }
+
+### A3. Datos inválidos → 400 con los errores del password
+POST {{baseUrl}}/api/auth/registro
+Content-Type: application/json
+
+{ "nombre": "", "email": "no-es-mail", "password": "corta" }
+
+### A4. Login con mail que no existe → 401 "Credenciales inválidas"
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "nadie@libreria.test", "password": "Libreria2026" }
+
+### A5. Login con password incorrecta → 401, EL MISMO mensaje que A4
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "luca@libreria.test", "password": "Incorrecta1" }
+
+### A6. Login CLIENTE (Ana) → 200 con token
+# @name login
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "luca@libreria.test", "password": "1234" }
+
+### Token de CLIENTE queda guardado acá
+@token = {{login.response.body.token}}
+
+### A7. Login ADMIN (del seed) → 200 con token
+# @name loginAdmin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "admin@libreria.test", "password": "Admin1234" }
+
+### Token de ADMIN queda guardado acá
+@tokenAdmin = {{loginAdmin.response.body.token}}
+
+### A8. /auth/yo sin token → 401
+GET {{baseUrl}}/api/auth/yo
+
+### A9. /auth/yo con token de CLIENTE → 200
+GET {{baseUrl}}/api/auth/yo
+Authorization: Bearer {{token}}
+
+
 ### ==========================================
 ### LIBROS (5 Requests)
 ### ==========================================
 
-### 1. Obtener todos los libros (o filtrar por género)
+### 1. Obtener todos los libros (o filtrar por género) → público
 GET {{baseUrl}}/api/libros
 
-### 2. Obtener un libro por ID (Éxito - 200)
+### 2. Obtener un libro por ID (Éxito - 200) → público
 GET {{baseUrl}}/api/libros/1
 
-### 3. Obtener un libro inexistente (Error - 404)
+### 3. Obtener un libro inexistente (Error - 404) → público
 GET {{baseUrl}}/api/libros/999
 
-### 4. Crear un nuevo libro (Éxito - 201)
+### 4a. Crear un libro SIN token → 401
 POST {{baseUrl}}/api/libros
 Content-Type: application/json
 
@@ -25,24 +85,58 @@ Content-Type: application/json
   "imagen": "https://covers.openlibrary.org/b/id/8231860-L.jpg"
 }
 
-### 5. Eliminar un libro inexistente (Error - 404)
+### 4b. Crear un libro con token de CLIENTE → 403
+POST {{baseUrl}}/api/libros
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "titulo": "Fahrenheit 451",
+  "autor": "Ray Bradbury",
+  "genero": "Ciencia ficción",
+  "descripcion": "Una sociedad donde los libros están prohibidos.",
+  "imagen": "https://covers.openlibrary.org/b/id/8231860-L.jpg"
+}
+
+### 4c. Crear un nuevo libro con token de ADMIN (Éxito - 201)
+POST {{baseUrl}}/api/libros
+Content-Type: application/json
+Authorization: Bearer {{tokenAdmin}}
+
+{
+  "titulo": "Fahrenheit 451",
+  "autor": "Ray Bradbury",
+  "genero": "Ciencia ficción",
+  "descripcion": "Una sociedad donde los libros están prohibidos.",
+  "imagen": "https://covers.openlibrary.org/b/id/8231860-L.jpg"
+}
+
+### 5a. Eliminar un libro SIN token → 401
 DELETE {{baseUrl}}/api/libros/999
+
+### 5b. Eliminar un libro con token de CLIENTE → 403
+DELETE {{baseUrl}}/api/libros/999
+Authorization: Bearer {{token}}
+
+### 5c. Eliminar un libro inexistente con token de ADMIN (Error - 404)
+DELETE {{baseUrl}}/api/libros/999
+Authorization: Bearer {{tokenAdmin}}
 
 
 ### ==========================================
 ### AUTORES (5 Requests)
 ### ==========================================
 
-### 6. Obtener todos los autores (o filtrar por nacionalidad)
+### 6. Obtener todos los autores (o filtrar por nacionalidad) → público
 GET {{baseUrl}}/api/autores?nacionalidad=Japonés
 
-### 7. Obtener un autor por ID (Éxito - 200)
+### 7. Obtener un autor por ID (Éxito - 200) → público
 GET {{baseUrl}}/api/autores/1
 
-### 8. Obtener un autor inexistente (Error - 404)
+### 8. Obtener un autor inexistente (Error - 404) → público
 GET {{baseUrl}}/api/autores/999
 
-### 9. Editar un autor existente (Éxito - 200)
+### 9a. Editar un autor SIN token → 401
 PUT {{baseUrl}}/api/autores/1
 Content-Type: application/json
 
@@ -52,5 +146,53 @@ Content-Type: application/json
   "biografia": "Aviador y escritor francés. Edición de prueba."
 }
 
-### 10. Eliminar un autor por ID (Éxito - 204)
+### 9b. Editar un autor con token de CLIENTE → 403
+PUT {{baseUrl}}/api/autores/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "nombre": "Antoine de Saint-Exupéry",
+  "nacionalidad": "Francés",
+  "biografia": "Aviador y escritor francés. Edición de prueba."
+}
+
+### 9c. Editar un autor existente con token de ADMIN (Éxito - 200)
+PUT {{baseUrl}}/api/autores/1
+Content-Type: application/json
+Authorization: Bearer {{tokenAdmin}}
+
+{
+  "nombre": "Antoine de Saint-Exupéry",
+  "nacionalidad": "Francés",
+  "biografia": "Aviador y escritor francés. Edición de prueba."
+}
+
+### 10a. Eliminar un autor SIN token → 401
 DELETE {{baseUrl}}/api/autores/3
+
+### 10b. Eliminar un autor con token de CLIENTE → 403
+DELETE {{baseUrl}}/api/autores/3
+Authorization: Bearer {{token}}
+
+### 10c. Eliminar un autor por ID con token de ADMIN (Éxito - 204)
+DELETE {{baseUrl}}/api/autores/3
+Authorization: Bearer {{tokenAdmin}}
+
+
+### ==========================================
+### ROMPER EL TOKEN (verificación de la firma)
+### ==========================================
+
+### T1. Token con el payload modificado a mano → 401 "Token inválido"
+### Copiá tu token de A6, cambiale un caracter de la parte del MEDIO y pegalo acá
+GET {{baseUrl}}/api/auth/yo
+Authorization: Bearer PEGAR_EL_TOKEN_MODIFICADO_ACA
+
+### T2. Token que no es un token → 401 "Token inválido"
+GET {{baseUrl}}/api/auth/yo
+Authorization: Bearer no-es-un-token
+
+### T3. Header sin el prefijo Bearer → 401 "Falta el token"
+GET {{baseUrl}}/api/auth/yo
+Authorization: {{token}}
