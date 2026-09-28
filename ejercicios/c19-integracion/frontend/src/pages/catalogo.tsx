@@ -4,14 +4,13 @@ import Nav from 'react-bootstrap/esm/Nav'
 import { Link } from 'react-router-dom'
 import LibroCard from '../components/layout/LibroCard'
 import type { LibroCardProps } from '../types/Librocardprops'
+import { useFetch } from '../hooks/useFetch'
+import { useBusqueda } from '../context/BusquedaContext'
 
-type CatalogoProps = {
-  libros: LibroCardProps[]
-  loading: boolean
-  error: string | null
-}
+function Catalogo() {
+  const { data: libros, loading, error } = useFetch<LibroCardProps[]>('/libros')
+  const { filtro } = useBusqueda()
 
-function Catalogo({ libros, loading, error }: CatalogoProps) {
   useEffect(() => {
     if (loading) {
       document.title = 'Cargando catálogo...'
@@ -22,6 +21,11 @@ function Catalogo({ libros, loading, error }: CatalogoProps) {
     }
   }, [loading, error, libros])
 
+  const term = filtro.trim().toLowerCase()
+  const librosFiltrados = (libros ?? []).filter(
+    (l) => l.titulo.toLowerCase().includes(term) || l.autor.nombre.toLowerCase().includes(term)
+  )
+
   return (
     <>
       <section className="px-4 py-5 text-center bg-dark text-white">
@@ -29,14 +33,13 @@ function Catalogo({ libros, loading, error }: CatalogoProps) {
           <h1 className="display-5 fw-bold">Catálogo</h1>
           <div className="col-lg-6 mx-auto">
             <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
-              <Nav.Link as={Link} to="/Home" className="text-info">Inicio</Nav.Link>              
+              <Nav.Link as={Link} to="/Home" className="text-info">Inicio</Nav.Link>
             </div>
           </div>
         </div>
       </section>
 
       <div className="container-fluid py-5">
-        
         {loading && (
           <div className="d-flex flex-column align-items-center justify-content-center my-5">
             <Spinner animation="border" variant="light" role="status" style={{ width: '3rem', height: '3rem' }}>
@@ -55,11 +58,17 @@ function Catalogo({ libros, loading, error }: CatalogoProps) {
           </div>
         )}
 
-        {!loading && !error && libros && (
+        {!loading && !error && (
           <div className="container py-2">
             <h2 className="mb-4 text-center">Nuestra Selección</h2>
+            <p className="text-muted text-center">
+              Mostrando {librosFiltrados.length} de {(libros ?? []).length} libros
+            </p>
+            {librosFiltrados.length === 0 && (
+              <Alert variant="secondary" className="text-center">Sin resultados para "{filtro}"</Alert>
+            )}
             <div className="row g-4 justify-content-center">
-              {libros.map((libro) => (
+              {librosFiltrados.map((libro) => (
                 <LibroCard key={libro.id} {...libro} />
               ))}
             </div>

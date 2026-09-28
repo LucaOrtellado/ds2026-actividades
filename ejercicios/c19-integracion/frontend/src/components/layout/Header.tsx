@@ -1,7 +1,29 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import type { FormEvent } from 'react';
+import { useBusqueda } from '../../context/BusquedaContext';
+import { obtenerToken, borrarToken } from '../../service/sesion';
 
 import logo from '../../assets/logos-de-libros-1.jpg';
+
 function Header() {
+  const { filtro, setFiltro } = useBusqueda();
+  const navigate = useNavigate();
+
+  const buscar = (e: FormEvent) => {
+    e.preventDefault();
+    navigate('/catalogo');
+  };
+
+  const estaLogueado = !!obtenerToken();
+  const manejarSesion = () => {
+    if (estaLogueado) {
+      borrarToken();
+      navigate('/');
+    } else {
+      navigate('/login');
+    }
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
       <div className="container">
@@ -11,13 +33,13 @@ function Header() {
             Librería
           </span>
         </Link>
-        
+
         <button
           className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent"
-          aria-controls="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
@@ -25,16 +47,35 @@ function Header() {
         </button>
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link to="/catalogo" >Ver catálogo</Link>
+              <Link className="nav-link" to="/">Inicio</Link>
             </li>
             <li className="nav-item">
+              <Link className="nav-link" to="/catalogo">Ver catálogo</Link>
             </li>
           </ul>
+
+          <form onSubmit={buscar} className="d-flex me-lg-3" style={{ maxWidth: '18rem' }}>
+            <input
+              type="search"
+              className="form-control"
+              placeholder="Buscar por título o autor…"
+              value={filtro}
+              onChange={(e) => setFiltro(e.target.value)}
+            />
+            <button className="btn btn-outline-light ms-2" type="submit" aria-label="Buscar">
+              🔍
+            </button>
+          </form>
+
+          <button className="btn btn-outline-light mt-2 mt-lg-0" onClick={manejarSesion}>
+            {estaLogueado ? 'Salir' : 'Ingresar'}
+          </button>
         </div>
       </div>
     </nav>
   );
 }
+
 export default Header;

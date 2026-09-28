@@ -3,7 +3,7 @@ import Nav from 'react-bootstrap/esm/Nav';
 import { Link } from 'react-router-dom';
 import type { LibroCardProps } from '../../types/Librocardprops';
 
-function LibroCard({ id, titulo, autor, descripcion, precio, imagen, disponible }: LibroCardProps) {
+function LibroCard({ id, titulo, autor, precio, imagen, disponible }: LibroCardProps) {
   const [esFavorito, setEsFavorito] = useState<boolean>(false)
 
   return (
@@ -18,10 +18,9 @@ function LibroCard({ id, titulo, autor, descripcion, precio, imagen, disponible 
         />
         <div className="card-body">
           <h5 className="card-title">{titulo}</h5>
-          <p className="card-text text-truncate">{descripcion}</p> {/* text-truncate evita que desborde */}
         </div>
         <ul className="list-group list-group-flush">
-          <li className="list-group-item bg-secondary text-white">{autor}</li>
+          <li className="list-group-item bg-secondary text-white">{autor.nombre}</li>
           {/* Agregamos una validación por si precio viene undefined temporalmente */}
           <li className="list-group-item bg-secondary text-white">
             ${precio !== undefined && precio !== null ? precio.toFixed(2) : '0.00'}
