@@ -21,6 +21,7 @@ const librosDisponibles = (): Libro[] => {
 }
 
 const precioPromedio = (libros: Libro[]): number => {
+    if (libros.length === 0) return 0;
     let total=0;
     for (const libro of libros) {
         total += libro.precio;
@@ -58,7 +59,9 @@ const renderizar = (libros: Libro[]): void => {
 
     const cantidad = libros.length;
     const promedio = cantidad > 0 ? precioPromedio(libros) : 0;
-    stats.textContent = `Cantidad: ${cantidad} | Promedio: $${promedio.toFixed(2)}`;
+    if (stats) {
+        stats.textContent = `Cantidad: ${cantidad} | Promedio: $${promedio.toFixed(2)}`;
+    }
 };
 
 const input = document.querySelector('#filtroAutor') as HTMLInputElement;

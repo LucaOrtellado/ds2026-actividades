@@ -1,8 +1,7 @@
 import { obtenerToken } from './sesion';
-const BASE = import.meta.env.VITE_API_URL;
+const BASE = import.meta.env.VITE_API_URL || '/api';
 
 export async function apiFetch<T>(ruta: string, opciones: RequestInit = {}): Promise<T> {
-  
   const token = obtenerToken();
 
   const res = await fetch(`${BASE}${ruta}`, {
@@ -17,6 +16,5 @@ export async function apiFetch<T>(ruta: string, opciones: RequestInit = {}): Pro
   const cuerpo = await res.json().catch(() => null);   
   if (!res.ok) throw new Error(cuerpo?.error ?? `Error ${res.status}`);
 
-  
   return cuerpo as T;
 }

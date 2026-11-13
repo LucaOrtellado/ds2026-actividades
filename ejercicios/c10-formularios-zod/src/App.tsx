@@ -5,8 +5,10 @@ import Home from './pages/home';
 import Catalogo from './pages/catalogo';
 import LibroDetalle from './pages/LibroDetalle';
 import LibroNuevo from './pages/libroNuevo.tsx';
-import { libros as librosIniciales } from './components/libros';import { useState } from 'react';
+import { libros as librosIniciales } from './components/libros';
+import { useState } from 'react';
 import type { LibroCardProps } from './types/Librocardprops.ts';
+
 function App() {
   const [libros, setLibros] = useState<LibroCardProps[]>(librosIniciales);
 
@@ -18,6 +20,8 @@ function App() {
     <Layout>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/Home" element={<Home />} />
 
         <Route
           path="/catalogo"

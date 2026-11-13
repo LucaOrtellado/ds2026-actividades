@@ -1,33 +1,31 @@
-const calcularPrecioFinal = (monto,medioPago) =>{
+const calcularPrecioFinal = (monto, medioPago) => {
+    if (monto <= 0) {
+        return "El monto debe ser mayor a 0";
+    }
+
     let precFinal;
-    if (monto<200 && monto>0){
+    if (monto < 200) {
         precFinal = monto;
-    }
-    else if (monto<400 && monto>=200){
-        if (medioPago=="E"){
+    } else if (monto < 400) {
+        if (medioPago === "E") {
             precFinal = monto * 0.7;
-        }
-        else if (medioPago=="D"){
+        } else if (medioPago === "D") {
             precFinal = monto * 0.8;
-        }
-        else if (medioPago=="C"){
+        } else if (medioPago === "C") {
             precFinal = monto * 0.9;
+        } else {
+            return "Medio de pago inválido (use E, D o C)";
         }
-    }
-    else if (monto>=400){
+    } else {
         precFinal = monto * 0.6;
     }
-    if (medioPago === "E") {
-        return `Monto: ${monto}$ | Pago: E | Precio Final: ${precFinal}$`;
+
+    if (medioPago === "E" || medioPago === "D" || medioPago === "C") {
+        return `Monto: ${monto}$ | Pago: ${medioPago} | Precio Final: ${precFinal}$`;
     }
-    else if (medioPago === "D") {
-        return `Monto: ${monto}$| Pago: D | Precio Final: ${precFinal}$`;
-    }
-    else if (medioPago === "C") {
-        return `Monto: ${monto}$ | Pago: C | Precio Final: ${precFinal}$`;
-    }
-    
-}
+
+    return "Medio de pago inválido (use E, D o C)";
+};
 
 console.log(calcularPrecioFinal(150, "D"));
 console.log(calcularPrecioFinal(250, 'D'));

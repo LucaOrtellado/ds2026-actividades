@@ -27,6 +27,7 @@ const librosDisponibles = (): Libro[] => {
 }
 
 const precioPromedio = (libros: Libro[]): number => {
+    if (libros.length === 0) return 0;
     let total=0;
     for (const libro of libros) {
         total += libro.precio;
@@ -51,7 +52,9 @@ const precioPromedio = (libros: Libro[]): number => {
     const cantidad = libros.length;
     const promedio = precioPromedio(libros);
 
-    stats.textContent = 'Cantidad: ' + cantidad + ' | Promedio: $' + promedio;
+    if (stats) {
+        stats.textContent = 'Cantidad: ' + cantidad + ' | Promedio: $' + promedio;
+    }
 };
 
 const input = document.querySelector('#filtroAutor') as HTMLInputElement;
@@ -71,3 +74,5 @@ Disponibles.addEventListener('click', () => {
 Todos.addEventListener('click', () => {
     renderizar(catalogo);
 });
+
+renderizar(catalogo);

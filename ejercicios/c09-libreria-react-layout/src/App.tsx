@@ -10,6 +10,8 @@ function App() {
     <Layout>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/Home" element={<Home />} />
         <Route path="/catalogo" element={<Catalogo />} />
         <Route path="/libros/:id" element={<LibroDetalle />} />
       </Routes>

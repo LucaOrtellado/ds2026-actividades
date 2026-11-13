@@ -21,6 +21,8 @@ export async function create(datos: Omit<Autor, "id">): Promise<Autor> {
 }
 
 export async function update(id: number, datos: Partial<Omit<Autor, "id">>): Promise<Autor | null> {
+  const existe = await prisma.autor.findUnique({ where: { id } });
+  if (!existe) return null;
   return prisma.autor.update({
     where: { id },
     data: datos

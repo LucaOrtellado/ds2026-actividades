@@ -19,7 +19,7 @@ const obtenerLibros = async (busqueda) => {
             : 'Autor desconocido',
         image: libro.cover_i
             ? `https://covers.openlibrary.org/b/id/${libro.cover_i}-M.jpg`
-            : 'imagenes/no-cover.png'
+            : 'imagenes/logos-de-libros-1.jpg'
     }));
 
     return libros;
@@ -27,7 +27,7 @@ const obtenerLibros = async (busqueda) => {
 
 const validarInput = () => {
 
-    if (input.value.trim() === '') {
+    if (!input || input.value.trim() === '') {
         return false;
     }
 
@@ -86,38 +86,43 @@ const crearElementoLibro = (libro) => {
 const mostrarLibros = async () => {
 
     if (!validarInput()) {
-        error.textContent = 'Por favor, ingresa un libro válido.';
+        if (error) error.textContent = 'Por favor, ingresa un libro válido.';
         return;
     }
 
-    error.textContent = '';
-    resultados.innerHTML = `
-        <p class="text-center w-100">Cargando...<p>
-    `;
+    if (error) error.textContent = '';
+    if (resultados) {
+        resultados.innerHTML = `
+            <p class="text-center w-100">Cargando...<p>
+        `;
+    }
 
     try {
         const libros = await obtenerLibros(input.value);
-        resultados.innerHTML = '';
+        if (resultados) resultados.innerHTML = '';
         if (libros.length === 0) {
-            error.textContent = 'No se encontraron libros.';
+            if (error) error.textContent = 'No se encontraron libros.';
             return;
         }
 
         for (const libro of libros.slice(0, 12)) {
-
-            resultados.appendChild(
-                crearElementoLibro(libro)
-            );
+            if (resultados) {
+                resultados.appendChild(
+                    crearElementoLibro(libro)
+                );
+            }
         }
 
     } catch (err) {
-
-        resultados.innerHTML = '';
-
-        error.textContent = `
-            Error al obtener libros: ${err}
-        `;
+        if (resultados) resultados.innerHTML = '';
+        if (error) {
+            error.textContent = `
+                Error al obtener libros: ${err}
+            `;
+        }
     }
 };
 
-boton.addEventListener('click', mostrarLibros);
+if (boton) {
+    boton.addEventListener('click', mostrarLibros);
+}

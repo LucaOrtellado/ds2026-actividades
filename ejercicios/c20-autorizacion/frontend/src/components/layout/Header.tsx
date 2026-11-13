@@ -1,12 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom';
 import type { FormEvent } from 'react';
 import { useBusqueda } from '../../context/BusquedaContext';
-import { obtenerToken, borrarToken } from '../../service/sesion';
-
+import { useAuth } from '../../context/AuthContext';
 import logo from '../../assets/logos-de-libros-1.jpg';
 
 function Header() {
   const { filtro, setFiltro } = useBusqueda();
+  const { usuario, logout, tieneRol } = useAuth();
   const navigate = useNavigate();
 
   const buscar = (e: FormEvent) => {
@@ -14,10 +14,9 @@ function Header() {
     navigate('/catalogo');
   };
 
-  const estaLogueado = !!obtenerToken();
   const manejarSesion = () => {
-    if (estaLogueado) {
-      borrarToken();
+    if (usuario) {
+      logout();
       navigate('/');
     } else {
       navigate('/login');
@@ -54,6 +53,11 @@ function Header() {
             <li className="nav-item">
               <Link className="nav-link" to="/catalogo">Ver catálogo</Link>
             </li>
+            {tieneRol('ADMIN') && (
+              <li className="nav-item">
+                <Link className="nav-link" to="/libros/nuevo">Nuevo libro</Link>
+              </li>
+            )}
           </ul>
 
           <form onSubmit={buscar} className="d-flex me-lg-3" style={{ maxWidth: '18rem' }}>
@@ -69,8 +73,12 @@ function Header() {
             </button>
           </form>
 
+          {usuario && (
+            <span className="text-white me-lg-3 mt-2 mt-lg-0">Hola, {usuario.nombre}</span>
+          )}
+
           <button className="btn btn-outline-light mt-2 mt-lg-0" onClick={manejarSesion}>
-            {estaLogueado ? 'Salir' : 'Ingresar'}
+            {usuario ? 'Salir' : 'Ingresar'}
           </button>
         </div>
       </div>

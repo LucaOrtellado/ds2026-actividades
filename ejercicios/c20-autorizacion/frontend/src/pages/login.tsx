@@ -1,5 +1,4 @@
 import { apiFetch } from '../service/api';
-import { guardarToken } from '../service/sesion';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import type { LoginValidado } from '../schemas/loginschema';
@@ -7,9 +6,11 @@ import type { Sesion } from '../types/sesionType';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '../schemas/loginschema';
+import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [errorApi, setErrorApi] = useState<string | null>(null);
 
     // Inicializamos react-hook-form conectado al esquema de Zod
@@ -18,14 +19,16 @@ export default function Login() {
     });
 
     const onSubmit = async (datos: LoginValidado) => {
-    try {
-        const sesion = await apiFetch<Sesion>('/auth/login',
-        { method: 'POST', body: JSON.stringify(datos) });
-        guardarToken(sesion.token);
-        navigate('/catalogo');
-    } catch (e) {
-        setErrorApi(e instanceof Error ? e.message : 'Error desconocido');
-    }
+        try {
+            const sesion = await apiFetch<Sesion>('/auth/login', {
+                method: 'POST',
+                body: JSON.stringify(datos)
+            });
+            login(sesion);
+            navigate('/catalogo');
+        } catch (e) {
+            setErrorApi(e instanceof Error ? e.message : 'Error desconocido');
+        }
     };
 
     return (
@@ -67,5 +70,4 @@ export default function Login() {
         </form>
         </div>  
     );
-
 }
