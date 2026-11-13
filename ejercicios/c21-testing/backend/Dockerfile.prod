@@ -1,0 +1,39 @@
+# Dockerfile para Producción (Render)
+FROM node:22-alpine AS builder
+
+WORKDIR /app
+
+# Instalar dependencias necesarias para compilar
+COPY package*.json ./
+RUN npm install
+
+# Copiar esquema de Prisma y generar cliente
+COPY prisma ./prisma
+COPY prisma.config.ts ./
+RUN npx prisma generate
+
+# Copiar código fuente y compilar TypeScript
+COPY tsconfig*.json ./
+COPY src ./src
+RUN npm run build
+
+# Stage final de producción
+FROM node:22-alpine
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+COPY package*.json ./
+RUN npm install --omit=dev
+
+COPY prisma ./prisma
+COPY prisma.config.ts ./
+RUN npx prisma generate
+
+COPY --from=builder /app/dist ./dist
+
+EXPOSE 3000
+
+# Al iniciar, corre migraciones y levanta el servidor
+CMD sh -c "npx prisma migrate deploy && node dist/index.js"
