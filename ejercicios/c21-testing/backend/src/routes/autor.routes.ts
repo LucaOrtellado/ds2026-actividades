@@ -1,9 +1,9 @@
 import { Router } from "express";
-import * as autorController from "../controllers/autor.controller";
-import { validate, validateParams } from "../middlewares/validate.middleware";
-import { idParamSchema } from "../validations/autor.validation";
-import { autorCreateSchema, autorUpdateSchema } from "../validations/autor.validation";
-import { authenticate, authorize } from "../middlewares/auth.middleware";
+import * as autorController from "../controllers/autor.controller.js";
+import { validate, validateParams } from "../middlewares/validate.middleware.js";
+import { idParamSchema } from "../validations/autor.validation.js";
+import { autorCreateSchema, autorUpdateSchema } from "../validations/autor.validation.js";
+import { authenticate, authorize } from "../middlewares/auth.middleware.js";
 const router = Router();
 
 router.get("/", autorController.getAll);

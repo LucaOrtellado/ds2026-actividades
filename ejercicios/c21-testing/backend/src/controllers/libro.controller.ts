@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as libroService from "../services/libro.service";
+import * as libroService from "../services/libro.service.js";
 
 export async function getAll(req: Request, res: Response) {
   const { disponible } = req.query;

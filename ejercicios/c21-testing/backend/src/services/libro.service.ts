@@ -1,5 +1,5 @@
-import { prisma } from "../config/prisma";
-import { Libro , Prisma } from "../generated/prisma/client";
+import { prisma } from "../config/prisma.js";
+import { Libro , Prisma } from "../generated/prisma/client.js";
 
 
 export type LibroConAutor = Prisma.LibroGetPayload<{ include: { autor: true } }>;

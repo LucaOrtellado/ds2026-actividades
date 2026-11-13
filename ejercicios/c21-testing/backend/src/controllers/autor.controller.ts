@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as autoresService from "../services/autor.service";
+import * as autoresService from "../services/autor.service.js";
 
 export async function getAll(req: Request, res: Response) {
     return res.json(await autoresService.findAll());

@@ -1,8 +1,8 @@
 import { it, expect } from "vitest";
 import request from "supertest";
 import jwt from "jsonwebtoken";
-import app from "../app";
-import { JWT_SECRET } from "../config/env";
+import app from "../app.js";
+import { JWT_SECRET } from "../config/env.js";
 
 const tokenCliente = jwt.sign({ id: 2, rol: "CLIENTE" }, JWT_SECRET, { expiresIn: "1h" });
 const tokenAdmin   = jwt.sign({ id: 1, rol: "ADMIN" },   JWT_SECRET, { expiresIn: "1h" });

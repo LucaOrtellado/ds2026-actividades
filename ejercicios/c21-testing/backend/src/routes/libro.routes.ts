@@ -1,9 +1,9 @@
 import { Router } from "express";
-import * as libroController from "../controllers/libro.controller";
-import { validate, validateParams } from "../middlewares/validate.middleware";
-import { idParamSchema } from "../validations/libro.validation";
-import { libroCreateSchema, libroUpdateSchema } from "../validations/libro.validation";
-import { authenticate, authorize } from "../middlewares/auth.middleware";
+import * as libroController from "../controllers/libro.controller.js";
+import { validate, validateParams } from "../middlewares/validate.middleware.js";
+import { idParamSchema } from "../validations/libro.validation.js";
+import { libroCreateSchema, libroUpdateSchema } from "../validations/libro.validation.js";
+import { authenticate, authorize } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 router.get("/", libroController.getAll);

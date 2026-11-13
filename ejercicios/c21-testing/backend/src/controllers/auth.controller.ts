@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as authService from "../services/auth.service";
+import * as authService from "../services/auth.service.js";
 
 export async function registrar(req: Request, res: Response) {
   const usuario = await authService.registrar(req.body);

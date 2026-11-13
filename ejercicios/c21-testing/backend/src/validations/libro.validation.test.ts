@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { libroCreateSchema } from "./libro.validation";
+import { libroCreateSchema } from "./libro.validation.js";
 
 const libroValido = { titulo: "Rayuela", precio: 7000, imagen: "https://img/r.jpg", autorId: 1 };
 

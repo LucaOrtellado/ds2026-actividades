@@ -1,8 +1,8 @@
 import express from "express";
-import libroRoutes from "./routes/libro.routes";
-import autorRoutes from "./routes/autor.routes";
-import authRoutes from "./routes/auth.routes";
-import { errorHandler } from "./middlewares/error.middleware";
+import libroRoutes from "./routes/libro.routes.js";
+import autorRoutes from "./routes/autor.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+import { errorHandler } from "./middlewares/error.middleware.js";
 import cors from "cors";
 
 const app = express();

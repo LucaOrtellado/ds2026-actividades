@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { loginSchema } from "./auth.validation";
+import { loginSchema } from "./auth.validation.js";
 
 describe("loginSchema", () => {
   it("normaliza el email pasando a minúsculas y recortando espacios", () => {

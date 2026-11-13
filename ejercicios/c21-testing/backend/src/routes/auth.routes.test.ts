@@ -1,7 +1,7 @@
 // Estos tests requieren una base de datos PostgreSQL activa con el seed cargado (docker compose up -d db)
 import { describe, it, expect } from "vitest";
 import request from "supertest";
-import app from "../app";
+import app from "../app.js";
 
 describe("POST /api/auth/login (requiere DB)", () => {
   it("inicia sesión correctamente con credenciales válidas", async () => {

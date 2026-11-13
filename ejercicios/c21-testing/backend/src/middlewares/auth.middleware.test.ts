@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { authorize, authenticate } from "./auth.middleware";
-import { JWT_SECRET } from "../config/env";
+import { authorize, authenticate } from "./auth.middleware.js";
+import { JWT_SECRET } from "../config/env.js";
 
 function mocks(req: Partial<Request> = {}) {
   const res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() } as unknown as Response;

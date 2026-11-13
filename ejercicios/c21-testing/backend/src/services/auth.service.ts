@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { prisma } from "../config/prisma";
-import { JWT_SECRET, JWT_EXPIRES_IN, SALT_ROUNDS } from "../config/env";
-import type { Registro, Login } from "../validations/auth.validation";
+import { prisma } from "../config/prisma.js";
+import { JWT_SECRET, JWT_EXPIRES_IN, SALT_ROUNDS } from "../config/env.js";
+import type { Registro, Login } from "../validations/auth.validation.js";
 
 export type PayloadToken   = { id: number; rol: "ADMIN" | "CLIENTE" };
 export type UsuarioPublico = { id: number; email: string; nombre: string; rol: "ADMIN" | "CLIENTE" };
