@@ -1,6 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
 import type { Request, Response, NextFunction } from "express";
-import { authorize } from "./auth.middleware";
+import jwt from "jsonwebtoken";
+import { authorize, authenticate } from "./auth.middleware";
+import { JWT_SECRET } from "../config/env";
 
 function mocks(req: Partial<Request> = {}) {
   const res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() } as unknown as Response;
@@ -26,6 +28,32 @@ describe("authorize", () => {
     const { req, res, next } = mocks();
     authorize("ADMIN")(req, res, next);
     expect(res.status).toHaveBeenCalledWith(401);
+    expect(next).not.toHaveBeenCalled();
+  });
+});
+
+describe("authenticate", () => {
+  it("responde 401 si falta el header Authorization", () => {
+    const { req, res, next } = mocks({ headers: {} });
+    authenticate(req, res, next);
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(next).not.toHaveBeenCalled();
+  });
+
+  it("autentica con token válido y pasa al next con usuario cargado", () => {
+    const token = jwt.sign({ id: 5, rol: "CLIENTE" }, JWT_SECRET, { expiresIn: "1h" });
+    const { req, res, next } = mocks({ headers: { authorization: `Bearer ${token}` } });
+    authenticate(req, res, next);
+    expect(req.usuario).toEqual({ id: 5, rol: "CLIENTE" });
+    expect(next).toHaveBeenCalled();
+  });
+
+  it("responde 401 con 'Token expirado' si el token expiró", () => {
+    const tokenExpirado = jwt.sign({ id: 5, rol: "CLIENTE" }, JWT_SECRET, { expiresIn: "-1s" });
+    const { req, res, next } = mocks({ headers: { authorization: `Bearer ${tokenExpirado}` } });
+    authenticate(req, res, next);
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({ error: "Token expirado" });
     expect(next).not.toHaveBeenCalled();
   });
 });
